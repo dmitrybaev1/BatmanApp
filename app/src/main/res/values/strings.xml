@@ -4,4 +4,6 @@
     <string name="gotham_times_2">Batman: Savior or Menace? Read more in news release…</string>
     <string name="gotham_times_3">City at War: Batman saves entire family. Read more in news release…</string>
     <string name="gotham_times_4">Wayne foundation brings new hope. Read more in news release…</string>
+    <string name="channel_name">Main channel</string>
+    <string name="channel_description">Main channel for general purposes</string>
 </resources>

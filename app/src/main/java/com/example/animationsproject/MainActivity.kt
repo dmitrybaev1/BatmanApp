@@ -1,10 +1,15 @@
 package com.example.animationsproject
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.BatteryManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,11 +18,15 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.helper.widget.Carousel
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 
 class MainActivity : AppCompatActivity(), TopicsActions {
@@ -28,6 +37,8 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     private lateinit var newsDescriptionTextView: TextView
     private lateinit var newsButton: Button
     private var randomNewsNumber = 0
+    private val CHANNEL_ID = "Main"
+    private val NEGATIVE_NOTIFICATION_ID = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +61,11 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         }
         PowerBroadcastReceiver()
         makeRandomNews()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
     }
 
     override fun makeRandomNews() {
@@ -81,6 +97,13 @@ class MainActivity : AppCompatActivity(), TopicsActions {
 
     inner class PowerBroadcastReceiver : BroadcastReceiver(), DefaultLifecycleObserver{
 
+        @RequiresApi(33)
+        private val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {}
+
+        private val notificationManagerCompat = NotificationManagerCompat.from(this@MainActivity)
+
         init{
             lifecycle.addObserver(this)
         }
@@ -92,6 +115,9 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         private val flags = ContextCompat.RECEIVER_EXPORTED
 
         override fun onStart(owner: LifecycleOwner) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createNotificationChannel()
+            }
             detectUsbConnection()
             ContextCompat.registerReceiver(this@MainActivity, this, filter, flags)
             Log.d("START","onStart")
@@ -104,9 +130,26 @@ class MainActivity : AppCompatActivity(), TopicsActions {
 
         override fun onReceive(context: Context?, intent: Intent?) {
             when(intent?.action){
-                Intent.ACTION_POWER_DISCONNECTED -> setProtectedBackground()
-                Intent.ACTION_POWER_CONNECTED -> setUnprotectedBackground()
+                Intent.ACTION_POWER_DISCONNECTED -> {destroyNegativeNotification();setProtectedBackground()}
+                Intent.ACTION_POWER_CONNECTED -> {createNegativeNotification();setUnprotectedBackground()}
             }
+        }
+
+        @RequiresApi(26)
+        private fun createNotificationChannel() {
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is new and not in the support library
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+
         }
 
         private fun detectUsbConnection(){
@@ -115,11 +158,42 @@ class MainActivity : AppCompatActivity(), TopicsActions {
             }
             val chargePlug = batteryStatus?.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) ?: -1
             val usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB
-            if(usbCharge)
+            if(usbCharge) {
+                createNegativeNotification()
                 setUnprotectedBackground()
-            else
+            }
+            else{
+                destroyNegativeNotification()
                 setProtectedBackground()
+            }
         }
 
+        private fun createNegativeNotification(){
+            if(Build.VERSION.SDK_INT >= 33){
+                if(ContextCompat.checkSelfPermission(this@MainActivity, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
+                    buildAndShowNegativeNotification()
+                }
+                else
+                    requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+            else {
+                buildAndShowNegativeNotification()
+            }
+
+        }
+        private fun buildAndShowNegativeNotification(){
+            val builder = NotificationCompat.Builder(this@MainActivity, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Внимание!")
+                .setContentText("Когда вы подключены по проводу, злодеи могут проникнуть в ваш телефон. Мы рекомендуем вам отключиться.")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(PendingIntent.getActivity(this@MainActivity, 0, Intent(), 0))
+                .setAutoCancel(true)
+            notificationManagerCompat.notify(NEGATIVE_NOTIFICATION_ID, builder.build())
+        }
+
+        private fun destroyNegativeNotification(){
+            notificationManagerCompat.cancel(NEGATIVE_NOTIFICATION_ID)
+        }
     }
 }
