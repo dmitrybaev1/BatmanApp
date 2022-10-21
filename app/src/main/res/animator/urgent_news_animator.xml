@@ -3,13 +3,13 @@
     android:ordering="together">
     <objectAnimator
         android:propertyName="scaleX"
-        android:duration="3000"
+        android:duration="1500"
         android:valueFrom="0.2f"
         android:valueTo="1f"
         android:valueType="floatType"/>
     <objectAnimator
         android:propertyName="scaleY"
-        android:duration="3000"
+        android:duration="1500"
         android:valueFrom="0.2f"
         android:valueTo="1f"
         android:valueType="floatType" />
@@ -19,6 +19,6 @@
         android:valueFrom="-20f"
         android:valueTo="340f"
         android:valueType="floatType"
-        android:repeatCount="30"
+        android:repeatCount="15"
         android:repeatMode="restart"/>
 </set>

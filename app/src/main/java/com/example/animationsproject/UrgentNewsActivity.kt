@@ -3,6 +3,7 @@ package com.example.animationsproject
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.content.res.Resources
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.animation.BounceInterpolator
@@ -12,10 +13,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
 class UrgentNewsActivity : AppCompatActivity() {
+
     private lateinit var newsImageView: ImageView
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_urgent)
+        mediaPlayer = MediaPlayer.create(this,R.raw.urgent_sound)
         //title = "Новостной выпуск"
         newsImageView = findViewById(R.id.newsImageView)
         when(intent.getIntExtra("newsNumber",5)){
@@ -29,5 +34,15 @@ class UrgentNewsActivity : AppCompatActivity() {
             interpolator = DecelerateInterpolator()
             start()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mediaPlayer.start()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mediaPlayer.stop()
     }
 }
