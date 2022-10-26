@@ -1,5 +1,6 @@
 package com.example.animationsproject
 
+import android.app.ActivityOptions
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -18,7 +19,6 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
@@ -33,9 +33,11 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     private lateinit var rootLayout: LinearLayout
     private lateinit var carousel: Carousel
     private lateinit var newsLayout: LinearLayout
+    private lateinit var vpnLayout: LinearLayout
     private lateinit var newsTitleTextView: TextView
     private lateinit var newsDescriptionTextView: TextView
     private lateinit var newsButton: Button
+    private lateinit var vpnButton: Button
     private var randomNewsNumber = 0
     private val CHANNEL_ID = "Main"
     private val NEGATIVE_NOTIFICATION_ID = 0
@@ -45,12 +47,13 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        title = "Главная страница"
         rootLayout = findViewById(R.id.rootLayout)
         newsLayout = findViewById(R.id.newsLayout)
+        vpnLayout = findViewById(R.id.vpnLayuot)
         newsTitleTextView = findViewById(R.id.titleNewsTextView)
         newsDescriptionTextView = findViewById(R.id.descriptionNewsTextView)
         newsButton = findViewById(R.id.newsButton)
+        vpnButton = findViewById(R.id.vpnButton)
         newsLayout.visibility = View.GONE
         carousel = findViewById(R.id.carousel)
         carousel.setAdapter(TopicsCarouselAdapter(this))
@@ -59,17 +62,17 @@ class MainActivity : AppCompatActivity(), TopicsActions {
             intent.putExtra("newsNumber",randomNewsNumber)
             startActivity(intent)
         }
+        vpnButton.setOnClickListener {
+            val intent = Intent(this,VpnActivity::class.java)
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+        }
         PowerBroadcastReceiver()
         makeRandomNews()
     }
 
-    override fun onStart() {
-        super.onStart()
-
-    }
-
     override fun makeRandomNews() {
         newsLayout.visibility = View.VISIBLE
+        vpnLayout.visibility = View.INVISIBLE
         randomNewsNumber = java.util.Random().nextInt(4)
         Log.d("random",randomNewsNumber.toString())
         when(randomNewsNumber){
@@ -82,7 +85,13 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     }
 
     override fun empty() {
-        newsLayout.visibility = View.GONE
+        newsLayout.visibility = View.INVISIBLE
+        vpnLayout.visibility = View.INVISIBLE
+    }
+
+    override fun showVPN() {
+        newsLayout.visibility = View.INVISIBLE
+        vpnLayout.visibility = View.VISIBLE
     }
 
     private fun setUnprotectedBackground(){
@@ -120,18 +129,28 @@ class MainActivity : AppCompatActivity(), TopicsActions {
             }
             detectUsbConnection()
             ContextCompat.registerReceiver(this@MainActivity, this, filter, flags)
-            Log.d("START","onStart")
         }
 
         override fun onStop(owner: LifecycleOwner) {
             this@MainActivity.unregisterReceiver(this)
-            Log.d("STOP","onStop")
         }
 
         override fun onReceive(context: Context?, intent: Intent?) {
             when(intent?.action){
-                Intent.ACTION_POWER_DISCONNECTED -> {destroyNegativeNotification();setProtectedBackground()}
-                Intent.ACTION_POWER_CONNECTED -> {createNegativeNotification();setUnprotectedBackground()}
+                Intent.ACTION_POWER_DISCONNECTED -> {
+                    if(getConnectionStatus() != false.toString()) {
+                        writeConnectionStatus(false)
+                        destroyNegativeNotification()
+                        setProtectedBackground()
+                    }
+                }
+                Intent.ACTION_POWER_CONNECTED -> {
+                    if(getConnectionStatus() != true.toString()) {
+                        writeConnectionStatus(true)
+                        createNegativeNotification()
+                        setUnprotectedBackground()
+                    }
+                }
             }
         }
 
@@ -158,13 +177,27 @@ class MainActivity : AppCompatActivity(), TopicsActions {
             }
             val chargePlug = batteryStatus?.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) ?: -1
             val usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB
-            if(usbCharge) {
-                createNegativeNotification()
-                setUnprotectedBackground()
+            if(getConnectionStatus() != usbCharge.toString()) {
+                writeConnectionStatus(usbCharge)
+                if (usbCharge) {
+                    createNegativeNotification()
+                    setUnprotectedBackground()
+                } else {
+                    destroyNegativeNotification()
+                    setProtectedBackground()
+                }
             }
-            else{
-                destroyNegativeNotification()
-                setProtectedBackground()
+        }
+
+        private fun getConnectionStatus(): String?{
+            val sharedPref = getPreferences(Context.MODE_PRIVATE)
+            return sharedPref.getString("connected",null)
+        }
+        private fun writeConnectionStatus(connected: Boolean){
+            val sharedPref = getPreferences(Context.MODE_PRIVATE)
+            with(sharedPref.edit()){
+                putString("connected",connected.toString())
+                apply()
             }
         }
 

@@ -4,4 +4,6 @@ interface TopicsActions {
     fun makeRandomNews()
 
     fun empty()
+
+    fun showVPN()
 }

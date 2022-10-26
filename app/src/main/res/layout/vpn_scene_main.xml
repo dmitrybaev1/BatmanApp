@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/vpn_violet">
+
+    <ImageView
+        android:id="@+id/phoneImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/phone_vpn_1" />
+
+    <ImageView
+        android:id="@+id/thingUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-10dp"
+        android:scaleX="0.85"
+        android:scaleY="0.85"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/vector8" />
+
+    <ImageView
+        android:id="@+id/thingLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-10dp"
+        android:layout_marginTop="100dp"
+        android:scaleX="0.85"
+        android:scaleY="0.85"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/vector10" />
+
+    <ImageView
+        android:id="@+id/thingRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="-10dp"
+        android:scaleX="0.85"
+        android:scaleY="0.85"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/vector12" />
+
+    <ImageView
+        android:id="@+id/holder"
+        android:layout_width="wrap_content"
+        android:layout_height="450dp"
+        android:scaleType="fitXY"
+        android:scaleX="2"
+        android:scaleY="1"
+        android:translationX="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_back_vpn" />
+
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:orientation="vertical"
+        android:translationY="400dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="Автоматическое подключение"
+            android:textColor="@color/black"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/stepIndicatorImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:srcCompat="@drawable/step_indicator_1" />
+
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="@string/vpn_description_step_1"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/nextStepButton"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginTop="-80dp"
+        android:background="@drawable/vpn_button"
+        android:text="@string/got_it"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:translationY="400dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contentLayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,11 +2,8 @@ package com.example.animationsproject
 
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
-import android.content.res.Resources
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.view.animation.BounceInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +26,7 @@ class UrgentNewsActivity : AppCompatActivity() {
             2 -> newsImageView.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gotham_times_3))
             3 -> newsImageView.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gotham_times_4))
         }
-        (AnimatorInflater.loadAnimator(this, R.animator.urgent_news_animator) as AnimatorSet).apply {
+        (AnimatorInflater.loadAnimator(this, R.animator.urgent_news_rotation) as AnimatorSet).apply {
             setTarget(newsImageView)
             interpolator = DecelerateInterpolator()
             start()

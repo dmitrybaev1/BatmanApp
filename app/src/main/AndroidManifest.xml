@@ -22,8 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UrgentNewsActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name=".UrgentNewsActivity" />
+        <activity android:name=".VpnActivity"
+            android:theme="@style/Theme.VPN"/>
 
     </application>
 
