@@ -38,6 +38,7 @@ class VpnActivity : AppCompatActivity(){
     private lateinit var titleTextView: TextView
     private lateinit var descriptionTextView: TextView
     private lateinit var nextStepButton: Button
+    private lateinit var cancelButton: Button
     private val vpnAnimator = VpnAnimator()
     private var stepCount = 1
 
@@ -65,11 +66,15 @@ class VpnActivity : AppCompatActivity(){
         stepIndicatorImageView = findViewById(R.id.stepIndicatorImageView)
         titleTextView = findViewById(R.id.titleTextView)
         descriptionTextView = findViewById(R.id.descriptionTextView)
+        cancelButton = findViewById(R.id.cancelButton)
+        cancelButton.setOnClickListener {
+            finishAfterTransition()
+        }
         nextStepButton = findViewById(R.id.nextStepButton)
         nextStepButton.setOnClickListener {
             when(stepCount){
                 1 -> {++stepCount;vpnAnimator.playToStep2Anim()}
-                2 -> {++stepCount;vpnAnimator.playToStep3Anim()}
+                2 -> {++stepCount;cancelButton.visibility = View.VISIBLE;vpnAnimator.playToStep3Anim()}
             }
         }
     }
@@ -208,6 +213,10 @@ class VpnActivity : AppCompatActivity(){
                 setTarget(nextStepButton)
                 interpolator = AccelerateInterpolator()
             }
+            val cancelButtonUpAnim = (AnimatorInflater.loadAnimator(this@VpnActivity, R.animator.vpn_content_up) as AnimatorSet).apply {
+                setTarget(cancelButton)
+                interpolator = AccelerateInterpolator()
+            }
             val holderAnim2 = (AnimatorInflater.loadAnimator(this@VpnActivity, R.animator.vpn_holder_transition_2) as AnimatorSet).apply {
                 setTarget(holder)
                 interpolator = DecelerateInterpolator()
@@ -218,7 +227,7 @@ class VpnActivity : AppCompatActivity(){
             }
             AnimatorSet().apply {
                 play(contentDownAnim).with(phoneDownAnim).with(buttonDownAnim).before(holderAnim2)
-                play(holderAnim2).with(phoneAppearAnim).with(contentUpAnim).with(buttonUpAnim)
+                play(holderAnim2).with(phoneAppearAnim).with(contentUpAnim).with(buttonUpAnim).with(cancelButtonUpAnim)
                 start()
             }
         }

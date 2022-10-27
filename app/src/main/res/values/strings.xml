@@ -11,9 +11,9 @@
     <string name="vpn_title_step_3">Почувствуй\nвсе преимущества</string>
     <string name="vpn_description_step_1">Теперь не нужно каждый раз нажимать кнопку подключения VPN\n\nНастрой автоматическое подключение для тех приложений которыми ты обычно пользуешься и больше не думать отключен ли vpn на твоем устройстве.</string>
     <string name="vpn_description_step_2">Не оставляет никаких следов и защищает конфиденциальные данные\n\nТеперь никто не узнает где вы были и что делали.</string>
-    <string name="vpn_description_step_3">&lt;font color=\"#6747CE\">\u2726&lt;/font>  Автоматизация&lt;br>&lt;br>&lt;font color=\"#6747CE\">\u2726&lt;/font>  Самые быстрые соединения&lt;br>&lt;br>&lt;font color=\"#6747CE\">\u2726&lt;/font>  Трафик без ограничений</string>
+    <string name="vpn_description_step_3">&lt;font color=\"#6747CE\">\u2726&lt;/font>  Автоматизация&lt;br>&lt;font color=\"#6747CE\">\u2726&lt;/font>  Самые быстрые соединения&lt;br>&lt;font color=\"#6747CE\">\u2726&lt;/font>  Трафик без ограничений</string>
+    <string name="next_time">В другой раз</string>
     <string name="try_it">Попробовать&lt;br>&lt;font color=\"#E474FF\">Бесплатный период 3 дня&lt;/font></string>
     <string name="got_it">Понятно</string>
     <string name="press_yes">Жми \"Да\" если хочешь забыть про это,\nНо продолжать пользоваться любимыми\nприложениями</string>
-    <string name="greeting_vpn">&lt;font size=\"5\">НАДОЕЛО&lt;/font> &lt;font size=\"3\">ВСЕ ВРЕМЯ&lt;/font> &lt;font size=\"5\">ВКЛЮЧАТЬ&lt;/font> &lt;/font> &lt;font size=\"3\">И ВЫКЛЮЧАТЬ&lt;/font> &lt;font size=\"6\" color=\"#6747CE\">VPN&lt;/font>&lt;font size=\"3\">?&lt;/font></string>
 </resources>

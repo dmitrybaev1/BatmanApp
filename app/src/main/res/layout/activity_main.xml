@@ -8,13 +8,21 @@
     android:background="@color/background_white"
     android:orientation="vertical">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/batman_title" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/cardViewMarginMain"
         android:background="@color/white"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="@dimen/cardCornerRadius">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -100,55 +108,72 @@
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true">
 
-            <LinearLayout
-                android:id="@+id/vpnLayuot"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/newsCardView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="visible">
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/cardViewMarginMain"
+                app:cardCornerRadius="@dimen/cardCornerRadius">
 
-                <Button
-                    android:id="@+id/vpnButton"
-                    style="@style/ButtonMain"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Настроить VPN" />
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/newsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/cardViewMarginMain"
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
-            <LinearLayout
-                android:id="@+id/newsLayout"
+                    <TextView
+                        android:id="@+id/titleNewsTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Gotham Times"
+                        android:textColor="@color/black"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/descriptionNewsTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="fill_horizontal"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="TextView" />
+
+                    <Button
+                        android:id="@+id/newsButton"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="К выпуску" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/vpnCardView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="visible">
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/cardViewMarginMain"
+                app:cardCornerRadius="@dimen/cardCornerRadius">
 
-                <TextView
-                    android:id="@+id/titleNewsTextView"
+                <LinearLayout
+                    android:id="@+id/vpnLayuot"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Gotham Times"
-                    android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/cardViewMarginMain"
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
-                <TextView
-                    android:id="@+id/descriptionNewsTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="fill_horizontal"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="TextView" />
+                    <Button
+                        android:id="@+id/vpnButton"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Настроить VPN" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                <Button
-                    android:id="@+id/newsButton"
-                    style="@style/ButtonMain"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="К выпуску" />
-            </LinearLayout>
         </FrameLayout>
     </ScrollView>
 

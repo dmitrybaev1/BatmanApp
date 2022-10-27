@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center"
-            android:text="Автоматическое подключение"
+            android:text="@string/vpn_title_step_1"
             android:textColor="@color/black"
             android:textSize="32sp"
             android:textStyle="bold" />
@@ -105,6 +105,23 @@
             android:textSize="16sp" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/cancelButton"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/next_time"
+        android:textAllCaps="false"
+        android:textColor="@color/vpn_violet"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:translationY="400dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/nextStepButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/nextStepButton"

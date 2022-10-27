@@ -22,6 +22,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.helper.widget.Carousel
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -32,8 +33,8 @@ import androidx.lifecycle.LifecycleOwner
 class MainActivity : AppCompatActivity(), TopicsActions {
     private lateinit var rootLayout: LinearLayout
     private lateinit var carousel: Carousel
-    private lateinit var newsLayout: LinearLayout
-    private lateinit var vpnLayout: LinearLayout
+    private lateinit var newsCardView: CardView
+    private lateinit var vpnCardView: CardView
     private lateinit var newsTitleTextView: TextView
     private lateinit var newsDescriptionTextView: TextView
     private lateinit var newsButton: Button
@@ -48,13 +49,13 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         setContentView(R.layout.activity_main)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         rootLayout = findViewById(R.id.rootLayout)
-        newsLayout = findViewById(R.id.newsLayout)
-        vpnLayout = findViewById(R.id.vpnLayuot)
+        newsCardView = findViewById(R.id.newsCardView)
+        vpnCardView = findViewById(R.id.vpnCardView)
         newsTitleTextView = findViewById(R.id.titleNewsTextView)
         newsDescriptionTextView = findViewById(R.id.descriptionNewsTextView)
         newsButton = findViewById(R.id.newsButton)
         vpnButton = findViewById(R.id.vpnButton)
-        newsLayout.visibility = View.GONE
+        newsCardView.visibility = View.GONE
         carousel = findViewById(R.id.carousel)
         carousel.setAdapter(TopicsCarouselAdapter(this))
         newsButton.setOnClickListener {
@@ -71,8 +72,8 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     }
 
     override fun makeRandomNews() {
-        newsLayout.visibility = View.VISIBLE
-        vpnLayout.visibility = View.INVISIBLE
+        newsCardView.visibility = View.VISIBLE
+        vpnCardView.visibility = View.INVISIBLE
         randomNewsNumber = java.util.Random().nextInt(4)
         Log.d("random",randomNewsNumber.toString())
         when(randomNewsNumber){
@@ -85,13 +86,13 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     }
 
     override fun empty() {
-        newsLayout.visibility = View.INVISIBLE
-        vpnLayout.visibility = View.INVISIBLE
+        newsCardView.visibility = View.INVISIBLE
+        vpnCardView.visibility = View.INVISIBLE
     }
 
     override fun showVPN() {
-        newsLayout.visibility = View.INVISIBLE
-        vpnLayout.visibility = View.VISIBLE
+        newsCardView.visibility = View.INVISIBLE
+        vpnCardView.visibility = View.VISIBLE
     }
 
     private fun setUnprotectedBackground(){
