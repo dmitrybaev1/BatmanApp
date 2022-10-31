@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/carousel_scene_2">
+
+    <TextView
+        android:id="@+id/button0"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/carousel_item_drawable"
+        android:gravity="center"
+        android:text="Пусто"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/button1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/carousel_item_drawable"
+        android:gravity="center"
+        android:text="Срочные новости"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/button2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/carousel_item_drawable"
+        android:gravity="center"
+        android:text="Пусто"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/button3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/carousel_item_drawable"
+        android:gravity="center"
+        android:text="Пусто"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/button4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/carousel_item_drawable"
+        android:gravity="center"
+        android:text="Пусто"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/button5"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/carousel_item_drawable"
+        android:gravity="center"
+        android:text="Пусто"
+        android:textColor="@color/white" />
+
+    <androidx.constraintlayout.helper.widget.Carousel
+        android:id="@+id/carousel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:carousel_backwardTransition="@+id/backward"
+        app:carousel_firstView="@id/button1"
+        app:carousel_forwardTransition="@+id/forward"
+        app:carousel_infinite="true"
+        app:carousel_nextState="@+id/next"
+        app:carousel_previousState="@+id/previous"
+        app:constraint_referenced_ids="button0,button1,button2,button3,button4,button5" />
+</androidx.constraintlayout.motion.widget.MotionLayout>

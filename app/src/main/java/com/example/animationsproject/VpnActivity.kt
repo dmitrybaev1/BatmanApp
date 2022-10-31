@@ -56,7 +56,7 @@ class VpnActivity : AppCompatActivity(){
     }
 
     private fun initMain(){
-        rootLayout = findViewById(R.id.rootLayout)
+        rootLayout = findViewById(R.id.mainLayout)
         phoneImageView = rootLayout.findViewById(R.id.phoneImageView)
         contentLayout = findViewById(R.id.contentLayout)
         thingLeft = findViewById(R.id.thingLeft)

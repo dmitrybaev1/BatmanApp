@@ -10,4 +10,5 @@
     <color name="background_white">#ECECEC</color>
     <color name="red">#E41919</color>
     <color name="vpn_violet">#6747CE</color>
+    <color name="alpha_hint">#80000000</color>
 </resources>

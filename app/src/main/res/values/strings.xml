@@ -16,4 +16,5 @@
     <string name="try_it">Попробовать&lt;br>&lt;font color=\"#E474FF\">Бесплатный период 3 дня&lt;/font></string>
     <string name="got_it">Понятно</string>
     <string name="press_yes">Жми \"Да\" если хочешь забыть про это,\nНо продолжать пользоваться любимыми\nприложениями</string>
+    <string name="how_to_control_carousel">\u27f7\nСвайпай влево или вправо, чтобы выбрать пункт в карусели</string>
 </resources>

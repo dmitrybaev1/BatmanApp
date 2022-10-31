@@ -17,7 +17,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +24,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.helper.widget.Carousel
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -32,7 +32,9 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 
 class MainActivity : AppCompatActivity(), TopicsActions {
-    private lateinit var rootLayout: LinearLayout
+    private lateinit var rootLayout: ConstraintLayout
+    private lateinit var howToTextView: TextView
+    private lateinit var mainLayout: LinearLayout
     private lateinit var carousel: Carousel
     private lateinit var newsCardView: CardView
     private lateinit var vpnCardView: CardView
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     private lateinit var vpnButton: Button
     private var randomNewsNumber = 0
     private var currentNewsNumber = 0
+
     companion object{
         const val CHANNEL_ID = "Main"
         const val NEGATIVE_NOTIFICATION_ID = 0
@@ -54,6 +57,8 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         setContentView(R.layout.activity_main)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         rootLayout = findViewById(R.id.rootLayout)
+        howToTextView = findViewById(R.id.howToTextView)
+        mainLayout = findViewById(R.id.mainLayout)
         newsCardView = findViewById(R.id.newsCardView)
         vpnCardView = findViewById(R.id.vpnCardView)
         newsTitleTextView = findViewById(R.id.titleNewsTextView)
@@ -62,6 +67,12 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         vpnButton = findViewById(R.id.vpnButton)
         carousel = findViewById(R.id.carousel)
         carousel.setAdapter(TopicsCarouselAdapter(this))
+        carousel.setOnClickListener {
+            howToTextView.visibility = View.VISIBLE
+        }
+        howToTextView.setOnClickListener {
+            it.visibility = View.GONE
+        }
         newsButton.setOnClickListener {
             val intent = Intent(this,UrgentNewsActivity::class.java)
             intent.putExtra("newsNumber",randomNewsNumber)
@@ -118,12 +129,12 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     }
 
     private fun setUnprotectedBackground(){
-        (rootLayout.parent as ScrollView).background = ContextCompat.getDrawable(this,R.drawable.unprotected_state)
+        rootLayout.background = ContextCompat.getDrawable(this,R.drawable.unprotected_state)
         Toast.makeText(this,"Внимание: питание подключено, вы уязвимы",Toast.LENGTH_LONG).show()
     }
 
     private fun setProtectedBackground(){
-        (rootLayout.parent as ScrollView).background = ContextCompat.getDrawable(this,R.color.background_white)
+        rootLayout.background = ContextCompat.getDrawable(this,R.color.background_white)
         Toast.makeText(this,"Питание отключено, вы защищены",Toast.LENGTH_LONG).show()
     }
 
