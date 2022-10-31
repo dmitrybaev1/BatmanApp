@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -40,9 +41,13 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     private lateinit var newsButton: Button
     private lateinit var vpnButton: Button
     private var randomNewsNumber = 0
-    private val CHANNEL_ID = "Main"
-    private val NEGATIVE_NOTIFICATION_ID = 0
-
+    private var currentNewsNumber = 0
+    companion object{
+        const val CHANNEL_ID = "Main"
+        const val NEGATIVE_NOTIFICATION_ID = 0
+        const val CAROUSEL_INDEX_TAG = "carouselIndex"
+        const val CURRENT_NEWS_TAG = "currentNews"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +60,6 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         newsDescriptionTextView = findViewById(R.id.descriptionNewsTextView)
         newsButton = findViewById(R.id.newsButton)
         vpnButton = findViewById(R.id.vpnButton)
-        newsCardView.visibility = View.GONE
         carousel = findViewById(R.id.carousel)
         carousel.setAdapter(TopicsCarouselAdapter(this))
         newsButton.setOnClickListener {
@@ -68,21 +72,39 @@ class MainActivity : AppCompatActivity(), TopicsActions {
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
         }
         PowerBroadcastReceiver()
-        makeRandomNews()
+        savedInstanceState?.let {
+            if(it.containsKey(CAROUSEL_INDEX_TAG) && it.getInt(CAROUSEL_INDEX_TAG) == 0 && it.containsKey(CURRENT_NEWS_TAG)) {
+                currentNewsNumber = it.getInt(CURRENT_NEWS_TAG)
+                setNews(currentNewsNumber)
+            }
+            else
+                makeRandomNews()
+        } ?: run{makeRandomNews()}
     }
 
-    override fun makeRandomNews() {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(CAROUSEL_INDEX_TAG,carousel.currentIndex)
+        Log.d("currentNewNumberSave",currentNewsNumber.toString())
+        outState.putInt(CURRENT_NEWS_TAG,currentNewsNumber)
+    }
+
+    private fun setNews(newsNumber: Int){
         newsCardView.visibility = View.VISIBLE
         vpnCardView.visibility = View.INVISIBLE
-        randomNewsNumber = java.util.Random().nextInt(4)
-        Log.d("random",randomNewsNumber.toString())
-        when(randomNewsNumber){
+        when(newsNumber){
             0 -> newsDescriptionTextView.text = resources.getString(R.string.gotham_times_1)
             1 -> newsDescriptionTextView.text = resources.getString(R.string.gotham_times_2)
             2 -> newsDescriptionTextView.text = resources.getString(R.string.gotham_times_3)
             3 -> newsDescriptionTextView.text = resources.getString(R.string.gotham_times_4)
         }
+    }
 
+    override fun makeRandomNews() {
+        randomNewsNumber = java.util.Random().nextInt(4)
+        setNews(randomNewsNumber)
+        currentNewsNumber = randomNewsNumber
+        Log.d("currentNewsNumber",currentNewsNumber.toString())
     }
 
     override fun empty() {
@@ -96,12 +118,12 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     }
 
     private fun setUnprotectedBackground(){
-        rootLayout.background = ContextCompat.getDrawable(this,R.drawable.unprotected_state)
+        (rootLayout.parent as ScrollView).background = ContextCompat.getDrawable(this,R.drawable.unprotected_state)
         Toast.makeText(this,"Внимание: питание подключено, вы уязвимы",Toast.LENGTH_LONG).show()
     }
 
     private fun setProtectedBackground(){
-        rootLayout.background = ContextCompat.getDrawable(this,R.color.background_white)
+        (rootLayout.parent as ScrollView).background = ContextCompat.getDrawable(this,R.color.background_white)
         Toast.makeText(this,"Питание отключено, вы защищены",Toast.LENGTH_LONG).show()
     }
 

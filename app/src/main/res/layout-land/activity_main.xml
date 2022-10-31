@@ -89,6 +89,24 @@
                         android:text="Пусто"
                         android:textColor="@color/white" />
 
+                    <TextView
+                        android:id="@+id/button4"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/carousel_item_drawable"
+                        android:gravity="center"
+                        android:text="Пусто"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/button5"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/carousel_item_drawable"
+                        android:gravity="center"
+                        android:text="Пусто"
+                        android:textColor="@color/white" />
+
                     <androidx.constraintlayout.helper.widget.Carousel
                         android:id="@+id/carousel"
                         android:layout_width="wrap_content"
@@ -99,7 +117,7 @@
                         app:carousel_infinite="true"
                         app:carousel_nextState="@+id/next"
                         app:carousel_previousState="@+id/previous"
-                        app:constraint_referenced_ids="button0,button1,button2,button3" />
+                        app:constraint_referenced_ids="button0,button1,button2,button3,button4,button5" />
                 </androidx.constraintlayout.motion.widget.MotionLayout>
             </LinearLayout>
 
