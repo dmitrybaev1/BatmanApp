@@ -1,5 +1,9 @@
 package com.example.animationsproject
 
+import android.animation.Animator
+import android.animation.AnimatorInflater
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
 import android.app.ActivityOptions
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -15,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -24,6 +30,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.helper.widget.Carousel
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -35,6 +42,7 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     private lateinit var rootLayout: ConstraintLayout
     private lateinit var howToTextView: TextView
     private lateinit var mainLayout: LinearLayout
+    private lateinit var carouselCardView: CardView
     private lateinit var carousel: Carousel
     private lateinit var newsCardView: CardView
     private lateinit var vpnCardView: CardView
@@ -67,11 +75,16 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         vpnButton = findViewById(R.id.vpnButton)
         carousel = findViewById(R.id.carousel)
         carousel.setAdapter(TopicsCarouselAdapter(this))
-        carousel.setOnClickListener {
+        carouselCardView = findViewById(R.id.carouselCardView)
+        findViewById<TextView>(R.id.button0).setOnClickListener {
             howToTextView.visibility = View.VISIBLE
         }
+        carouselCardView.setOnClickListener {
+            howToTextView.visibility = View.VISIBLE
+            playHintAppearAnim()
+        }
         howToTextView.setOnClickListener {
-            it.visibility = View.GONE
+            playHintDisappearAnim()
         }
         newsButton.setOnClickListener {
             val intent = Intent(this,UrgentNewsActivity::class.java)
@@ -91,6 +104,28 @@ class MainActivity : AppCompatActivity(), TopicsActions {
             else
                 makeRandomNews()
         } ?: run{makeRandomNews()}
+    }
+
+    private fun playHintAppearAnim(){
+        (AnimatorInflater.loadAnimator(this, R.animator.hint_appear) as AnimatorSet).apply {
+            setTarget(howToTextView)
+            interpolator = LinearInterpolator()
+            start()
+        }
+    }
+
+    private fun playHintDisappearAnim(){
+        (AnimatorInflater.loadAnimator(this, R.animator.hint_disappear) as AnimatorSet).apply {
+            setTarget(howToTextView)
+            interpolator = LinearInterpolator()
+            start()
+            addListener(object : AnimatorListenerAdapter(){
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    howToTextView.visibility = View.GONE
+                }
+            })
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -75,6 +75,7 @@ class VpnActivity : AppCompatActivity(){
             when(stepCount){
                 1 -> {++stepCount;vpnAnimator.playToStep2Anim()}
                 2 -> {++stepCount;cancelButton.visibility = View.VISIBLE;vpnAnimator.playToStep3Anim()}
+                3 -> VpnModalBottomSheet().show(supportFragmentManager,"")
             }
         }
     }

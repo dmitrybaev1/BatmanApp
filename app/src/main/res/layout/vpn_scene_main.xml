@@ -125,15 +125,13 @@
 
     <Button
         android:id="@+id/nextStepButton"
+        style="@style/VpnButton"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginTop="-80dp"
-        android:background="@drawable/vpn_button"
         android:text="@string/got_it"
         android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="14sp"
         android:translationY="400dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
