@@ -20,8 +20,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:background="@drawable/privacy_logo"
-            android:gravity="center"
-            android:text="TextView" />
+            android:gravity="center" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -72,6 +71,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
             android:text="@string/accept"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textSize="18sp" />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
