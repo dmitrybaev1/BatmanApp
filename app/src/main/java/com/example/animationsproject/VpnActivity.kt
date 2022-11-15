@@ -39,8 +39,10 @@ class VpnActivity : AppCompatActivity(){
     private lateinit var descriptionTextView: TextView
     private lateinit var nextStepButton: Button
     private lateinit var cancelButton: Button
+    private val measureTranslator = MeasureTranslator(this)
     private val vpnAnimator = VpnAnimator()
     private var stepCount = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,11 +82,7 @@ class VpnActivity : AppCompatActivity(){
         }
     }
 
-    private fun pxToDp(px: Float) = px / (resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
 
-    private fun dpToPx(dp: Float) = dp * (resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
-
-    private fun spToPx(sp: Float) = sp * (resources.displayMetrics.scaledDensity)
 
     inner class VpnAnimator{
         fun playToStep1Anim(){
@@ -194,10 +192,10 @@ class VpnActivity : AppCompatActivity(){
                         titleTextView.text = resources.getString(R.string.vpn_title_step_3)
                         descriptionTextView.setText(Html.fromHtml(resources.getString(R.string.vpn_description_step_3),Html.FROM_HTML_MODE_LEGACY),TextView.BufferType.SPANNABLE)
                         descriptionTextView.textAlignment = View.TEXT_ALIGNMENT_TEXT_START
-                        descriptionTextView.setPadding(dpToPx(35f).roundToInt(),0,0,0)
+                        descriptionTextView.setPadding(measureTranslator.dpToPx(35f).roundToInt(),0,0,0)
                         descriptionTextView.textSize = 18f
                         stepIndicatorImageView.setImageResource(R.drawable.step_indicator_3)
-                        nextStepButton.layoutParams.height = dpToPx(60f).roundToInt()
+                        nextStepButton.layoutParams.height = measureTranslator.dpToPx(60f).roundToInt()
                         nextStepButton.setText(Html.fromHtml(resources.getString(R.string.try_it),Html.FROM_HTML_MODE_LEGACY),TextView.BufferType.SPANNABLE)
                     }
                 })
