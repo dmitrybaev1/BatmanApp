@@ -128,6 +128,29 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/blurCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/cardViewMarginMain"
+                    app:cardCornerRadius="@dimen/cardCornerRadius">
+
+                    <LinearLayout
+                        android:id="@+id/blurLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/cardViewMarginMain"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <Button
+                            android:id="@+id/blurButton"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="Начать" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
             </FrameLayout>
 

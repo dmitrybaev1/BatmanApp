@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
@@ -46,10 +45,12 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     private lateinit var carousel: Carousel
     private lateinit var newsCardView: CardView
     private lateinit var vpnCardView: CardView
+    private lateinit var blurCardView: CardView
     private lateinit var newsTitleTextView: TextView
     private lateinit var newsDescriptionTextView: TextView
     private lateinit var newsButton: Button
     private lateinit var vpnButton: Button
+    private lateinit var blurButton: Button
     private var randomNewsNumber = 0
     private var currentNewsNumber = 0
 
@@ -69,6 +70,8 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         mainLayout = findViewById(R.id.mainLayout)
         newsCardView = findViewById(R.id.newsCardView)
         vpnCardView = findViewById(R.id.vpnCardView)
+        blurCardView = findViewById(R.id.blurCardView)
+        blurButton = findViewById(R.id.blurButton)
         newsTitleTextView = findViewById(R.id.titleNewsTextView)
         newsDescriptionTextView = findViewById(R.id.descriptionNewsTextView)
         newsButton = findViewById(R.id.newsButton)
@@ -94,6 +97,10 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         vpnButton.setOnClickListener {
             val intent = Intent(this,VpnActivity::class.java)
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+        }
+        blurButton.setOnClickListener {
+            val intent = Intent(this,BlurActivity::class.java)
+            startActivity(intent)
         }
         PowerBroadcastReceiver()
         savedInstanceState?.let {
@@ -138,6 +145,7 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     private fun setNews(newsNumber: Int){
         newsCardView.visibility = View.VISIBLE
         vpnCardView.visibility = View.INVISIBLE
+        blurCardView.visibility = View.INVISIBLE
         when(newsNumber){
             0 -> newsDescriptionTextView.text = resources.getString(R.string.gotham_times_1)
             1 -> newsDescriptionTextView.text = resources.getString(R.string.gotham_times_2)
@@ -156,11 +164,19 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     override fun empty() {
         newsCardView.visibility = View.INVISIBLE
         vpnCardView.visibility = View.INVISIBLE
+        blurCardView.visibility = View.INVISIBLE
     }
 
     override fun showVPN() {
         newsCardView.visibility = View.INVISIBLE
         vpnCardView.visibility = View.VISIBLE
+        blurCardView.visibility = View.INVISIBLE
+    }
+
+    override fun blurJoker() {
+        newsCardView.visibility = View.INVISIBLE
+        vpnCardView.visibility = View.INVISIBLE
+        blurCardView.visibility = View.VISIBLE
     }
 
     private fun setUnprotectedBackground(){
