@@ -11,7 +11,7 @@ import androidx.constraintlayout.helper.widget.Carousel
 import kotlin.random.Random
 
 class TopicsCarouselAdapter(private val topicsActions: TopicsActions) : Carousel.Adapter {
-    private val list = arrayListOf<String>("Срочные новости", "VPN", "Пусто", "Пусто", "Пусто")
+    private val list = arrayListOf<String>("Срочные новости", "VPN", "Заблюрить Джокера", "Пусто", "Пусто")
     override fun count(): Int = list.size
 
     override fun populate(view: View?, index: Int) {
@@ -23,6 +23,7 @@ class TopicsCarouselAdapter(private val topicsActions: TopicsActions) : Carousel
         when(index){
             0 -> topicsActions.makeRandomNews()
             1 -> topicsActions.showVPN()
+            2 -> topicsActions.blurJoker()
             else -> topicsActions.empty()
         }
     }

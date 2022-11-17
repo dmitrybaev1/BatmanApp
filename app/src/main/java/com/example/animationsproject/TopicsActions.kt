@@ -6,4 +6,6 @@ interface TopicsActions {
     fun empty()
 
     fun showVPN()
+
+    fun blurJoker()
 }
