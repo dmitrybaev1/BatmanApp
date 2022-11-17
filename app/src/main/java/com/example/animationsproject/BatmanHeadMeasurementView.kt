@@ -16,7 +16,6 @@ import kotlin.math.roundToInt
 class BatmanHeadMeasurementView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var mHeadColor: Int
     private var mHeadCount: Int
-    private val measureTranslator = MeasureTranslator(context)
     private val bitmap: Bitmap
     init {
         context.theme.obtainStyledAttributes(
@@ -38,11 +37,11 @@ class BatmanHeadMeasurementView(context: Context, attrs: AttributeSet) : View(co
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val defHeight = if(layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT)
-            MeasureSpec.makeMeasureSpec(measureTranslator.dpToPx(25f).roundToInt(),MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec(dpToPx(25f,context).roundToInt(),MeasureSpec.EXACTLY)
         else
             heightMeasureSpec
         val defWidth = if(layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT)
-            MeasureSpec.makeMeasureSpec(measureTranslator.dpToPx(25f).roundToInt()*mHeadCount,MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec(dpToPx(25f,context).roundToInt()*mHeadCount,MeasureSpec.EXACTLY)
         else
             widthMeasureSpec
         super.onMeasure(defWidth, defHeight)
