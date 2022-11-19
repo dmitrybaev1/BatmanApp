@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.Html
 import androidx.transition.Scene
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -21,12 +22,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
+import com.example.animationsproject.databinding.ActivityVpnBinding
+import com.example.animationsproject.databinding.VpnSceneMainBinding
+import com.example.animationsproject.databinding.VpnScenePreparationBinding
 import kotlin.math.roundToInt
 
 class VpnActivity : AppCompatActivity(){
 
 
-    //Main
     private lateinit var rootLayout: ConstraintLayout
     private lateinit var phoneImageView: ImageView
     private lateinit var contentLayout: LinearLayout
@@ -39,36 +42,41 @@ class VpnActivity : AppCompatActivity(){
     private lateinit var descriptionTextView: TextView
     private lateinit var nextStepButton: Button
     private lateinit var cancelButton: Button
-    private val measureTranslator = MeasureTranslator(this)
+    private lateinit var activityVpnBinding: ActivityVpnBinding
+    private lateinit var vpnSceneMainBinding: VpnSceneMainBinding
+    private lateinit var vpnScenePreparationBinding: VpnScenePreparationBinding
     private val vpnAnimator = VpnAnimator()
     private var stepCount = 1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_vpn)
-        val sceneRoot: FrameLayout = findViewById(R.id.vpnSceneRoot)
+        activityVpnBinding = ActivityVpnBinding.inflate(layoutInflater)
+        vpnScenePreparationBinding = activityVpnBinding.scene
+        setContentView(activityVpnBinding.root)
+        val sceneRoot: FrameLayout = activityVpnBinding.vpnSceneRoot
         val endingScene = Scene.getSceneForLayout(sceneRoot,R.layout.vpn_scene_main,this)
-        val yesButton: Button = findViewById(R.id.yesButton)
+        val yesButton: Button = vpnScenePreparationBinding.yesButton
         yesButton.setOnClickListener {
             TransitionManager.go(endingScene,AutoTransition())
+            vpnSceneMainBinding = VpnSceneMainBinding.bind(endingScene.sceneRoot.getChildAt(0))
             initMain()
             vpnAnimator.playToStep1Anim()
         }
     }
 
     private fun initMain(){
-        rootLayout = findViewById(R.id.mainLayout)
-        phoneImageView = rootLayout.findViewById(R.id.phoneImageView)
-        contentLayout = findViewById(R.id.contentLayout)
-        thingLeft = findViewById(R.id.thingLeft)
-        thingUp = findViewById(R.id.thingUp)
-        thingRight = findViewById(R.id.thingRight)
-        holder = findViewById(R.id.holder)
-        stepIndicatorImageView = findViewById(R.id.stepIndicatorImageView)
-        titleTextView = findViewById(R.id.titleTextView)
-        descriptionTextView = findViewById(R.id.descriptionTextView)
-        cancelButton = findViewById(R.id.cancelButton)
+        rootLayout = vpnSceneMainBinding.mainLayout
+        phoneImageView = vpnSceneMainBinding.phoneImageView
+        contentLayout = vpnSceneMainBinding.contentLayout
+        thingLeft = vpnSceneMainBinding.thingLeft
+        thingUp = vpnSceneMainBinding.thingUp
+        thingRight = vpnSceneMainBinding.thingRight
+        holder = vpnSceneMainBinding.holder
+        stepIndicatorImageView = vpnSceneMainBinding.stepIndicatorImageView
+        titleTextView = vpnSceneMainBinding.titleTextView
+        descriptionTextView = vpnSceneMainBinding.descriptionTextView
+        cancelButton = vpnSceneMainBinding.cancelButton
         cancelButton.setOnClickListener {
             finishAfterTransition()
         }
@@ -192,10 +200,10 @@ class VpnActivity : AppCompatActivity(){
                         titleTextView.text = resources.getString(R.string.vpn_title_step_3)
                         descriptionTextView.setText(Html.fromHtml(resources.getString(R.string.vpn_description_step_3),Html.FROM_HTML_MODE_LEGACY),TextView.BufferType.SPANNABLE)
                         descriptionTextView.textAlignment = View.TEXT_ALIGNMENT_TEXT_START
-                        descriptionTextView.setPadding(measureTranslator.dpToPx(35f).roundToInt(),0,0,0)
+                        descriptionTextView.setPadding(dpToPx(35f,this@VpnActivity).roundToInt(),0,0,0)
                         descriptionTextView.textSize = 18f
                         stepIndicatorImageView.setImageResource(R.drawable.step_indicator_3)
-                        nextStepButton.layoutParams.height = measureTranslator.dpToPx(60f).roundToInt()
+                        nextStepButton.layoutParams.height = dpToPx(60f,this@VpnActivity).roundToInt()
                         nextStepButton.setText(Html.fromHtml(resources.getString(R.string.try_it),Html.FROM_HTML_MODE_LEGACY),TextView.BufferType.SPANNABLE)
                     }
                 })

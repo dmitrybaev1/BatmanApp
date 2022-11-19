@@ -14,6 +14,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.work.*
+import com.example.animationsproject.databinding.ActivityBlurBinding
 import com.google.common.util.concurrent.FutureCallback
 import com.google.common.util.concurrent.Futures
 import java.util.concurrent.Executors
@@ -28,19 +29,16 @@ class BlurActivity : AppCompatActivity() {
         const val SAVE_IMAGE_TAG = "save image tag"
         const val OUTPUT_PATH = "blur_outputs"
     }
-    private lateinit var jokerImageView: ImageView
-    private lateinit var applyButton: Button
-    private lateinit var seeImageButton: Button
+    private lateinit var binding: ActivityBlurBinding
     private val workManager = WorkManager.getInstance(this)
     private var outputUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_blur)
-        jokerImageView = findViewById(R.id.jokerImageView)
-        applyButton = findViewById(R.id.applyButton)
-        seeImageButton = findViewById(R.id.seeImageButton)
-        applyButton.setOnClickListener {
+        binding = ActivityBlurBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.applyButton.setOnClickListener {
             var continuation = workManager.beginUniqueWork(BLUR_IMAGE_WORK,ExistingWorkPolicy.KEEP,
                 OneTimeWorkRequestBuilder<BlurWorker>()
                     .addTag(BLUR_TAG)
@@ -65,7 +63,7 @@ class BlurActivity : AppCompatActivity() {
             waitForBlurredBitmapAndSet()
             waitForSavingBitmapAndShowButton()
         }
-        seeImageButton.setOnClickListener {
+        binding.seeImageButton.setOnClickListener {
             outputUri?.let{
                 val intent = Intent(Intent.ACTION_VIEW,it)
                 startActivity(intent)
@@ -78,7 +76,7 @@ class BlurActivity : AppCompatActivity() {
             if(workInfo.state.isFinished){
                 val imageUri = workInfo.outputData.getString(BITMAP_KEY)
                 val bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(Uri.parse(imageUri)))
-                jokerImageView.setImageBitmap(bitmap)
+                binding.jokerImageView.setImageBitmap(bitmap)
             }
         }
     }
@@ -89,7 +87,7 @@ class BlurActivity : AppCompatActivity() {
             if(workInfo.state.isFinished){
                 val resultUri = workInfo.outputData.getString(URL_SAVED_BITMAP_KEY)
                 outputUri = resultUri?.toUri()
-                seeImageButton.visibility = View.VISIBLE
+                binding.seeImageButton.visibility = View.VISIBLE
             }
         }
     }

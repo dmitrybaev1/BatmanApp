@@ -51,7 +51,9 @@
                         android:textSize="28sp"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/carousel_main" />
+                    <include
+                        android:id="@+id/carouselInclusion"
+                        layout="@layout/carousel_main" />
 
                 </LinearLayout>
 

@@ -20,37 +20,23 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
-import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.helper.widget.Carousel
-import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.example.animationsproject.databinding.ActivityMainBinding
+import com.example.animationsproject.databinding.CarouselMainBinding
 
 class MainActivity : AppCompatActivity(), TopicsActions {
-    private lateinit var rootLayout: ConstraintLayout
-    private lateinit var howToTextView: TextView
-    private lateinit var mainLayout: LinearLayout
-    private lateinit var carouselCardView: CardView
-    private lateinit var carousel: Carousel
-    private lateinit var newsCardView: CardView
-    private lateinit var vpnCardView: CardView
-    private lateinit var blurCardView: CardView
-    private lateinit var newsTitleTextView: TextView
-    private lateinit var newsDescriptionTextView: TextView
-    private lateinit var newsButton: Button
-    private lateinit var vpnButton: Button
-    private lateinit var blurButton: Button
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var carouselBinding: CarouselMainBinding
     private var randomNewsNumber = 0
     private var currentNewsNumber = 0
 
@@ -63,42 +49,28 @@ class MainActivity : AppCompatActivity(), TopicsActions {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        rootLayout = findViewById(R.id.rootLayout)
-        howToTextView = findViewById(R.id.howToTextView)
-        mainLayout = findViewById(R.id.mainLayout)
-        newsCardView = findViewById(R.id.newsCardView)
-        vpnCardView = findViewById(R.id.vpnCardView)
-        blurCardView = findViewById(R.id.blurCardView)
-        blurButton = findViewById(R.id.blurButton)
-        newsTitleTextView = findViewById(R.id.titleNewsTextView)
-        newsDescriptionTextView = findViewById(R.id.descriptionNewsTextView)
-        newsButton = findViewById(R.id.newsButton)
-        vpnButton = findViewById(R.id.vpnButton)
-        carousel = findViewById(R.id.carousel)
-        carousel.setAdapter(TopicsCarouselAdapter(this))
-        carouselCardView = findViewById(R.id.carouselCardView)
-        findViewById<TextView>(R.id.button0).setOnClickListener {
-            howToTextView.visibility = View.VISIBLE
-        }
-        carouselCardView.setOnClickListener {
-            howToTextView.visibility = View.VISIBLE
+        carouselBinding = binding.carouselInclusion
+        carouselBinding.carousel.setAdapter(TopicsCarouselAdapter(this))
+        binding.carouselCardView.setOnClickListener {
+            binding.howToTextView.visibility = View.VISIBLE
             playHintAppearAnim()
         }
-        howToTextView.setOnClickListener {
+        binding.howToTextView.setOnClickListener {
             playHintDisappearAnim()
         }
-        newsButton.setOnClickListener {
+        binding.newsButton.setOnClickListener {
             val intent = Intent(this,UrgentNewsActivity::class.java)
             intent.putExtra("newsNumber",randomNewsNumber)
             startActivity(intent)
         }
-        vpnButton.setOnClickListener {
+        binding.vpnButton.setOnClickListener {
             val intent = Intent(this,VpnActivity::class.java)
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
         }
-        blurButton.setOnClickListener {
+        binding.blurButton.setOnClickListener {
             val intent = Intent(this,BlurActivity::class.java)
             startActivity(intent)
         }
@@ -115,7 +87,7 @@ class MainActivity : AppCompatActivity(), TopicsActions {
 
     private fun playHintAppearAnim(){
         (AnimatorInflater.loadAnimator(this, R.animator.hint_appear) as AnimatorSet).apply {
-            setTarget(howToTextView)
+            setTarget(binding.howToTextView)
             interpolator = LinearInterpolator()
             start()
         }
@@ -123,13 +95,13 @@ class MainActivity : AppCompatActivity(), TopicsActions {
 
     private fun playHintDisappearAnim(){
         (AnimatorInflater.loadAnimator(this, R.animator.hint_disappear) as AnimatorSet).apply {
-            setTarget(howToTextView)
+            setTarget(binding.howToTextView)
             interpolator = LinearInterpolator()
             start()
             addListener(object : AnimatorListenerAdapter(){
                 override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
-                    howToTextView.visibility = View.GONE
+                    binding.howToTextView.visibility = View.GONE
                 }
             })
         }
@@ -137,20 +109,20 @@ class MainActivity : AppCompatActivity(), TopicsActions {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(CAROUSEL_INDEX_TAG,carousel.currentIndex)
+        outState.putInt(CAROUSEL_INDEX_TAG,carouselBinding.carousel.currentIndex)
         Log.d("currentNewNumberSave",currentNewsNumber.toString())
         outState.putInt(CURRENT_NEWS_TAG,currentNewsNumber)
     }
 
     private fun setNews(newsNumber: Int){
-        newsCardView.visibility = View.VISIBLE
-        vpnCardView.visibility = View.INVISIBLE
-        blurCardView.visibility = View.INVISIBLE
+        binding.newsCardView.visibility = View.VISIBLE
+        binding.vpnCardView.visibility = View.INVISIBLE
+        binding.blurCardView.visibility = View.INVISIBLE
         when(newsNumber){
-            0 -> newsDescriptionTextView.text = resources.getString(R.string.gotham_times_1)
-            1 -> newsDescriptionTextView.text = resources.getString(R.string.gotham_times_2)
-            2 -> newsDescriptionTextView.text = resources.getString(R.string.gotham_times_3)
-            3 -> newsDescriptionTextView.text = resources.getString(R.string.gotham_times_4)
+            0 -> binding.descriptionNewsTextView.text = resources.getString(R.string.gotham_times_1)
+            1 -> binding.descriptionNewsTextView.text = resources.getString(R.string.gotham_times_2)
+            2 -> binding.descriptionNewsTextView.text = resources.getString(R.string.gotham_times_3)
+            3 -> binding.descriptionNewsTextView.text = resources.getString(R.string.gotham_times_4)
         }
     }
 
@@ -162,30 +134,30 @@ class MainActivity : AppCompatActivity(), TopicsActions {
     }
 
     override fun empty() {
-        newsCardView.visibility = View.INVISIBLE
-        vpnCardView.visibility = View.INVISIBLE
-        blurCardView.visibility = View.INVISIBLE
+        binding.newsCardView.visibility = View.INVISIBLE
+        binding.vpnCardView.visibility = View.INVISIBLE
+        binding.blurCardView.visibility = View.INVISIBLE
     }
 
     override fun showVPN() {
-        newsCardView.visibility = View.INVISIBLE
-        vpnCardView.visibility = View.VISIBLE
-        blurCardView.visibility = View.INVISIBLE
+        binding.newsCardView.visibility = View.INVISIBLE
+        binding.vpnCardView.visibility = View.VISIBLE
+        binding.blurCardView.visibility = View.INVISIBLE
     }
 
     override fun blurJoker() {
-        newsCardView.visibility = View.INVISIBLE
-        vpnCardView.visibility = View.INVISIBLE
-        blurCardView.visibility = View.VISIBLE
+        binding.newsCardView.visibility = View.INVISIBLE
+        binding.vpnCardView.visibility = View.INVISIBLE
+        binding.blurCardView.visibility = View.VISIBLE
     }
 
     private fun setUnprotectedBackground(){
-        rootLayout.background = ContextCompat.getDrawable(this,R.drawable.unprotected_state)
+        binding.rootLayout.background = ContextCompat.getDrawable(this,R.drawable.unprotected_state)
         Toast.makeText(this,"Внимание: питание подключено, вы уязвимы",Toast.LENGTH_LONG).show()
     }
 
     private fun setProtectedBackground(){
-        rootLayout.background = ContextCompat.getDrawable(this,R.color.background_white)
+        binding.rootLayout.background = ContextCompat.getDrawable(this,R.color.background_white)
         Toast.makeText(this,"Питание отключено, вы защищены",Toast.LENGTH_LONG).show()
     }
 

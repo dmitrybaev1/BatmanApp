@@ -8,26 +8,27 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.animationsproject.databinding.ActivityUrgentBinding
 
 class UrgentNewsActivity : AppCompatActivity() {
 
-    private lateinit var newsImageView: ImageView
+    private lateinit var binding: ActivityUrgentBinding
     private lateinit var mediaPlayer: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_urgent)
+        binding = ActivityUrgentBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         mediaPlayer = MediaPlayer.create(this,R.raw.urgent_sound)
         //title = "Новостной выпуск"
-        newsImageView = findViewById(R.id.newsImageView)
         when(intent.getIntExtra("newsNumber",5)){
-            0 -> newsImageView.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gotham_times_1))
-            1 -> newsImageView.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gotham_times_2))
-            2 -> newsImageView.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gotham_times_3))
-            3 -> newsImageView.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gotham_times_4))
+            0 -> binding.newsImageView.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gotham_times_1))
+            1 -> binding.newsImageView.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gotham_times_2))
+            2 -> binding.newsImageView.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gotham_times_3))
+            3 -> binding.newsImageView.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.gotham_times_4))
         }
         (AnimatorInflater.loadAnimator(this, R.animator.urgent_news_rotation) as AnimatorSet).apply {
-            setTarget(newsImageView)
+            setTarget(binding.newsImageView)
             interpolator = DecelerateInterpolator()
             start()
         }
