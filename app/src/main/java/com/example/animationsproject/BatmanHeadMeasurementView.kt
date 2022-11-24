@@ -1,13 +1,8 @@
 package com.example.animationsproject
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -16,7 +11,12 @@ import kotlin.math.roundToInt
 class BatmanHeadMeasurementView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var mHeadColor: Int
     private var mHeadCount: Int
-    private val bitmap: Bitmap
+    private var mRatingMode: Boolean
+    private var mRating: Int
+    private var mRatingDisabledColor: Int
+    private val mBitmap: Bitmap
+    private val mHeadPaint = Paint()
+    private val mRatingDisabledHeadPaint = Paint()
     init {
         context.theme.obtainStyledAttributes(
             attrs,
@@ -26,13 +26,56 @@ class BatmanHeadMeasurementView(context: Context, attrs: AttributeSet) : View(co
             try {
                 mHeadColor = getColor(R.styleable.BatmanHeadMeasurementView_headColor,ContextCompat.getColor(context,R.color.black))
                 mHeadCount = getInt(R.styleable.BatmanHeadMeasurementView_headCount,1)
+                mRatingMode = getBoolean(R.styleable.BatmanHeadMeasurementView_ratingMode,false)
+                mRating = getInt(R.styleable.BatmanHeadMeasurementView_rating,0)
+                mRatingDisabledColor = getColor(R.styleable.BatmanHeadMeasurementView_ratingDisabledColor,ContextCompat.getColor(context,R.color.gray))
                 if(mHeadCount>100)
                     mHeadCount=100
+                if(mRating>mHeadCount)
+                    mRating=mHeadCount
             } finally {
                 recycle()
             }
         }
-        bitmap = BitmapFactory.decodeResource(context.resources,R.drawable.batman_head)
+        mHeadPaint.colorFilter = PorterDuffColorFilter(mHeadColor,PorterDuff.Mode.SRC_IN)
+        mRatingDisabledHeadPaint.colorFilter = PorterDuffColorFilter(mRatingDisabledColor,PorterDuff.Mode.SRC_IN)
+        mBitmap = BitmapFactory.decodeResource(context.resources,R.drawable.batman_head)
+    }
+
+    fun getHeadColor() = mHeadColor
+
+    fun setHeadColor(color: Int){
+        mHeadColor = color
+        invalidate()
+    }
+
+    fun getHeadCount() = mHeadCount
+
+    fun setHeadCount(headCount: Int){
+        mHeadCount = headCount
+        invalidate()
+        requestLayout()
+    }
+
+    fun isRatingMode() = mRatingMode
+
+    fun setRatingMode(ratingMode: Boolean){
+        mRatingMode = ratingMode
+        invalidate()
+    }
+
+    fun getRating() = mRating
+
+    fun setRating(rating: Int){
+        mRating = rating
+        invalidate()
+    }
+
+    fun getRatingDisabledColor() = mRatingDisabledColor
+
+    fun setRatingDisabledColor(color: Int){
+        mRatingDisabledColor = color
+        invalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -47,9 +90,6 @@ class BatmanHeadMeasurementView(context: Context, attrs: AttributeSet) : View(co
         super.onMeasure(defWidth, defHeight)
     }
 
-    private val headPaint = Paint().apply {
-        color = mHeadColor
-    }
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.apply {
@@ -66,9 +106,14 @@ class BatmanHeadMeasurementView(context: Context, attrs: AttributeSet) : View(co
         }
         val startY = y + paddingTop
         val endY = y + height - paddingBottom
-        //canvas.drawOval(startX,startY,endX,endY,headPaint)
-        val bitmapRect = Rect(0,0,bitmap.width,bitmap.height)
+        val bitmapRect = Rect(0,0,mBitmap.width,mBitmap.height)
         val viewRect = Rect(startX.roundToInt(),startY.roundToInt(),endX.roundToInt(),endY.roundToInt())
-        canvas.drawBitmap(bitmap,bitmapRect,viewRect,headPaint)
+        if(mRatingMode)
+            if(count<=mRating)
+                canvas.drawBitmap(mBitmap,bitmapRect,viewRect,mHeadPaint)
+            else
+                canvas.drawBitmap(mBitmap,bitmapRect,viewRect,mRatingDisabledHeadPaint)
+        else
+            canvas.drawBitmap(mBitmap,bitmapRect,viewRect,mHeadPaint)
     }
 }

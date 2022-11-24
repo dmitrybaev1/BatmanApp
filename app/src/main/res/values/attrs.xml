@@ -3,5 +3,8 @@
     <declare-styleable name="BatmanHeadMeasurementView">
         <attr name="headColor" format="color" />
         <attr name="headCount" format="integer"/>
+        <attr name="ratingMode" format="boolean"/>
+        <attr name="rating" format="integer"/>
+        <attr name="ratingDisabledColor" format="color"/>
     </declare-styleable>
 </resources>
