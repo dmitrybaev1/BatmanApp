@@ -31,11 +31,13 @@ class LeakService : Service() {
 
             val cancelPendingIntent = PendingIntent.getService(this,0,cancelIntent,PendingIntent.FLAG_CANCEL_CURRENT)
 
-            val builder = NotificationCompat.Builder(this, MainActivity.CHANNEL_ID)
-                .setContentTitle("Взлом")
-                .setContentText("Джокер пытается взломать ваш телефон, отмените это немедленно!")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .addAction(R.drawable.ic_launcher_foreground,"Отменить",cancelPendingIntent)
+            val builder = NotificationCompat.Builder(this, MainActivity.CHANNEL_ID).apply {
+                setContentTitle("Взлом")
+                setContentText("Джокер пытается взломать ваш телефон, отмените это немедленно!")
+                setSmallIcon(R.drawable.ic_launcher_foreground)
+                setOnlyAlertOnce(true)
+                addAction(R.drawable.ic_launcher_foreground,"Отменить",cancelPendingIntent)
+            }
 
             NotificationManagerCompat.from(this).apply {
                 builder.setProgress(PROGRESS_MAX,0,false)
@@ -44,12 +46,14 @@ class LeakService : Service() {
                     var counter = 0
                     while(counter <= PROGRESS_MAX && isRunning) {
                         try {
-                            ++counter
+                            counter++
                             if(counter == PROGRESS_MAX){
+                                Thread.sleep(2000L)
                                 builder.apply {
                                     setContentText("Вы взломаны!")
                                     clearActions()
                                     setProgress(0,0,false)
+                                    setOnlyAlertOnce(false)
                                 }
                                 notify(NOTIFICATION_ID,builder.build())
                                 Thread.sleep(5000L)
