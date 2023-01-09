@@ -156,6 +156,12 @@ class MainActivity : AppCompatActivity(), TopicsActions {
         Toast.makeText(this,"Внимание: питание подключено, вы уязвимы",Toast.LENGTH_LONG).show()
     }
 
+    @RequiresApi(26)
+    private fun startLeakService(){
+        val intent = Intent(this,LeakService::class.java)
+        applicationContext.startForegroundService(intent)
+    }
+
     private fun setProtectedBackground(){
         binding.rootLayout.background = ContextCompat.getDrawable(this,R.color.background_white)
         Toast.makeText(this,"Питание отключено, вы защищены",Toast.LENGTH_LONG).show()
@@ -206,6 +212,8 @@ class MainActivity : AppCompatActivity(), TopicsActions {
                         writeConnectionStatus(true)
                         createNegativeNotification()
                         setUnprotectedBackground()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                            startLeakService()
                     }
                 }
             }
@@ -239,6 +247,8 @@ class MainActivity : AppCompatActivity(), TopicsActions {
                 if (usbCharge) {
                     createNegativeNotification()
                     setUnprotectedBackground()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                        startLeakService()
                 } else {
                     destroyNegativeNotification()
                     setProtectedBackground()
